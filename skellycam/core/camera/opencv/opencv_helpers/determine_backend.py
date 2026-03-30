@@ -24,11 +24,23 @@ class OpenCVBackend(BaseModel):
 
 
 def determine_opencv_camera_backend() -> OpenCVBackend:
-    if "windows" in platform().lower():
-        # TODO - Try MSMF? We've used CAP_DSHOW for a long time, but MSMF is the default on Windows 10+ so may be worth trying.
+    platform_string = platform().lower()
+    
+    if "windows" in platform_string:
+        # Try DSHOW for Windows (could also try MSMF)
         backend = OpenCVBackend.from_backend_id(cv2.CAP_DSHOW)
+        logger.debug(f"Windows system detected, using backend: {backend.name}")
+        
+    elif "linux" in platform().lower():
+        # Force V4L2 for Linux USB cameras
+        backend = OpenCVBackend.from_backend_id(cv2.CAP_V4L2)
+        logger.debug(f"Linux detected, forcing V4L2 backend for USB camera")
+        
     else:
-        backend = OpenCVBackend.from_backend_id(supported_backends[0] if len(supported_backends) > 0 else cv2.CAP_ANY)
+        # Unknown system, use ANY
+        backend = OpenCVBackend.from_backend_id(cv2.CAP_ANY)
+        logger.warning(f"Unknown system: {platform_string}, using backend: {backend.name}")
+    
     logger.debug(f"Determined OpenCV backend: {backend.name} (ID: {backend.id})")
     return backend
 

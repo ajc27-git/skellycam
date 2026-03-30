@@ -30,7 +30,8 @@ class TestFrameMetadata:
         config.rotation = MagicMock()
         config.rotation.value = "NO_ROTATION"
         config.capture_fourcc = "MJPG"
-        config.writer_fourcc = "X264"
+        # config.writer_fourcc = "X264"
+        config.writer_fourcc = "MJPG"
 
         # Create a proper record array for the mock's to_numpy_record_array method
         mock_rec_array = np.recarray(1, dtype=CAMERA_CONFIG_DTYPE)

@@ -136,7 +136,8 @@ export function createDefaultCameraConfig(
         exposure_mode: 'MANUAL',
         exposure: -7,
         capture_fourcc: 'MJPG',
-        writer_fourcc: 'X264',
+        // writer_fourcc: 'X264',
+        writer_fourcc: 'MJPG',
     };
 }
 
